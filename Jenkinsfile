@@ -2,73 +2,47 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'shaharprofeta/fastapi-hello'
-        IMAGE_TAG = "${BUILD_NUMBER}"
+        IMAGE_NAME = 'ShaharProfeta/fastapi-hello'
+        TAG = 'latest'
     }
 
     stages {
-        stage('Cleanup') {
+        stage('Checkout from GitHub') {
             steps {
-                script {
-                    try {
-                        sh 'docker rm -f fastapi-app || true'
-                    } catch (Exception e) {
-                        echo 'No container to remove'
-                    }
-                }
+                git 'https://github.com/ShaharProfeta/HomeWorkProject.git'
             }
         }
 
-        stage('Build Docker image') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest ."
+                    sh "docker build -t ${IMAGE_NAME}:${TAG} ."
                 }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push ${IMAGE_NAME}:${IMAGE_TAG}
-                        docker push ${IMAGE_NAME}:latest
-                    """
-                }
-            }
-        }
-
-        stage('Run Docker container') {
-            steps {
                 script {
-                    sh """
-                        docker run -d \
-                            --name fastapi-app \
-                            -p 8000:8000 \
-                            ${IMAGE_NAME}:${IMAGE_TAG}
-                    """
-                    
-                    // Health check
-                    sh '''
-                        for i in {1..30}; do
-                            if curl -s http://localhost:8000/; then
-                                echo "Application is up!"
-                                exit 0
-                            fi
-                            sleep 2
-                        done
-                        echo "Application failed to start!"
-                        exit 1
-                    '''
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh """
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker push ${IMAGE_NAME}:${TAG}
+                        """
+                    }
                 }
             }
         }
-    }
 
-    post {
-        failure {
-            sh 'docker rm -f fastapi-app || true'
+        stage('Run Container') {
+            steps {
+                withCredentials([file(credentialsId: 'fastapi-env', variable: 'ENV_FILE')]) {
+                    script {
+                        sh "docker rm -f fastapi-app || true"
+                        sh "docker run -d --name fastapi-app --env-file $ENV_FILE -p 8000:8000 ${IMAGE_NAME}:${TAG}"
+                    }
+                }
+            }
         }
     }
 }
