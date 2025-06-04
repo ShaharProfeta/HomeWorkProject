@@ -68,6 +68,8 @@ Hello, world!
 ```
 
 ---
+# ⚙️ Jenkins Pipeline
+---
 
 ### ✅ Run Docker Compose
 
