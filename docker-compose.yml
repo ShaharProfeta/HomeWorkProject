@@ -9,7 +9,7 @@ services:
     restart: always
 
   jenkins:
-    image: jenkins/jenkins:jdk21
+    image: jenkins/jenkins:latest
     container_name: jenkins-server
     ports:
       - "8080:8080"  # Jenkins web UI
