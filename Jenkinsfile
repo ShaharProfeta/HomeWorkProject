@@ -6,12 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout from GitHub') {
-            steps {
-                git 'https://github.com/ShaharProfeta/HomeWorkProject.git'
-            }
-        }
-
         stage('Build Docker image') {
             steps {
                 sh 'docker build -t $IMAGE_NAME .'
