@@ -77,7 +77,6 @@ Now launch both containers:
 docker-compose up --build
 ```
 
----
 
 ### What this does:
 
@@ -87,6 +86,6 @@ docker-compose up --build
 #### Exposes:
 
 - Jenkins at [http://localhost:8080](http://localhost:8080)
-- FastAPI at [http://localhost:8000](http://localhost:8000/hello)
+- FastAPI at [http://localhost:8000/hello](http://localhost:8000/hello)
 
 ---
