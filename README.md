@@ -53,8 +53,11 @@ docker run -d -p 8000:8000 fastapi-hello
 .
 ├── back.py
 ├── Dockerfile
+├── docker-compose.yml
+├── Jenkinsfile
 ├── requirements.txt
 └── README.md
+
 ```
 
 ---
