@@ -69,7 +69,7 @@ Hello, world!
 
 ---
 # ⚙️ Jenkins Pipeline
----
+
 
 ### ✅ Run Docker Compose
 
@@ -91,3 +91,9 @@ docker-compose up --build
 - FastAPI at [http://localhost:8000/hello](http://localhost:8000/hello)
 
 ---
+
+### getting password for jenkins
+
+```bash
+docker exec -it jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+```
