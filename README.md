@@ -68,3 +68,25 @@ Hello, world!
 ```
 
 ---
+
+### ✅ Run Docker Compose
+
+Now launch both containers:
+
+```bash
+docker-compose up --build
+```
+
+---
+
+### What this does:
+
+- `--build`: builds the FastAPI app from your Dockerfile
+- Starts both `jenkins` and `fastapi-app` containers
+
+#### Exposes:
+
+- Jenkins at [http://localhost:8080](http://localhost:8080)
+- FastAPI at [http://localhost:8000](http://localhost:8000/hello)
+
+---
