@@ -1,5 +1,3 @@
-Here’s a `README.md` file based on the screenshot you provided:
-
 ---
 
 ### ✅ `README.md`
